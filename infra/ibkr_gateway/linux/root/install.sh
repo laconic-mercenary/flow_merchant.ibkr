@@ -19,7 +19,7 @@ function setup-directories() {
     log "adding user"
 
     groupadd -f ${APPGROUP}
-    id -u ${APPUSER} &>/dev/null || useradd -m -s /bin/bash -g ${APPGROUP} ${APPUSER}
+    id -u ${APPUSER} &>/dev/null || useradd -r -m -s /bin/bash -g ${APPGROUP} ${APPUSER}
 
     log "Setting up ${APP_DIR}"
     [ -d "${APP_DIR}" ] || {
@@ -101,7 +101,8 @@ function install-service() {
 
     log "enabling and starting ${APPUSER}"
     systemctl enable ${APPUSER}
-    systemctl restart ${APPUSER}
+    ## allow the user to start the service manually
+    ## systemctl restart ${APPUSER}
 
     log "finished installing ${APPUSER} service"
 }

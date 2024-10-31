@@ -1,9 +1,9 @@
 import logging
 import config
 import ssl
+import os
 
 from aiohttp import web
-
 
 import geoip2.database
 
@@ -34,13 +34,18 @@ def response_unauthorized(text='unauthorized') -> web.Response:
 def response_server_err(text='server error') -> web.Response:
     return web.Response(status=500, text=text)
 
-def is_in_geofence(ip_address: str) -> bool:
+def is_in_geofence(ip_address: str, country_code = "jp") -> bool:
     if ip_address == "127.0.0.1" or ip_address == "localhost" or ip_address == "::1":
+        logging.warning("local ip address, skipping geoip check")
         return True
-    with geoip2.database.Reader("/tmp/GeoLite2-City.mmdb") as reader:
+    maxmind_db = "/etc/ibkr_gateway/GeoLite2-City.mmdb"
+    if not os.path.exists(maxmind_db):
+        logging.warning("maxmind db not found, skipping geoip check")
+        return True
+    with geoip2.database.Reader(maxmind_db) as reader:
         response = reader.city(ip_address)
         logging.debug(f"geoip2 response: {response}")
-        return response.country.iso_code.lower() == "jp"
+        return response.country.iso_code.lower() == country_code
     
 def is_authorized(headers: dict[str, str]) -> bool:
     if HEADER_GATEWAY_PASSWORD() in headers:

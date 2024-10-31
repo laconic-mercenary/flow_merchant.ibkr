@@ -19,6 +19,12 @@ def ENV_GATEWAY_PASSWORD() -> str:
 def ENV_IBKR_API_ACCOUNT() -> str:
     return "IBKR_API_ACCOUNT"
 
+def ENV_IBKR_API_ORDER_CURRENCY() -> str:
+    return "IBKR_API_ORDER_CURRENCY"
+
+def APP_CONFIG_DIRECTORY() -> str:
+    return "/etc/ibkr_gateway"
+
 def __get_required_env(env_var_name: str, default=None) -> str:
     env_var_value = os.getenv(env_var_name)
     if env_var_value is None:
@@ -49,10 +55,10 @@ def gateway_password() -> str:
     return __get_required_env(ENV_GATEWAY_PASSWORD())
 
 def order_currency() -> str:
-    return "USD"
+    return __get_required_env(ENV_IBKR_API_ORDER_CURRENCY(), default="USD")
 
 def tls_cert_file() -> str:
-    return "./.tls/domain.cert.pem"
+    return f"${APP_CONFIG_DIRECTORY()}/domain.cert.pem"
 
 def tls_key_file() -> str:
-    return "./.tls/private.key.pem"
+    return f"${APP_CONFIG_DIRECTORY()}/private.key.pem"
