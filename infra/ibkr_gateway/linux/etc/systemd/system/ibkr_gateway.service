@@ -6,11 +6,11 @@ After=network.target
 Type=simple
 User=ibkr_gateway
 WorkingDirectory=/opt/ibkr_gateway
-ExecStart=/usr/bin/python3 /opt/ibkr_gateway/main.py
+ExecStart=/opt/ibkr_gateway/venv/bin/python /opt/ibkr_gateway/main.py
 Restart=on-failure
 RestartSec=15s
 StandardOutput=append:/var/log/ibkr_gateway/info.log
-StandardError=append:/var/log/ibkr_gateway-error.log
+StandardError=append:/var/log/ibkr_gateway/error.log
 EnvironmentFile=/etc/ibkr_gateway/.env
 
 [Install]
