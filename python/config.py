@@ -58,7 +58,7 @@ def order_currency() -> str:
     return __get_required_env(ENV_IBKR_API_ORDER_CURRENCY(), default="USD")
 
 def tls_cert_file() -> str:
-    return f"${APP_CONFIG_DIRECTORY()}/domain.cert.pem"
+    return f"{APP_CONFIG_DIRECTORY()}/domain.cert.pem"
 
 def tls_key_file() -> str:
-    return f"${APP_CONFIG_DIRECTORY()}/private.key.pem"
+    return f"{APP_CONFIG_DIRECTORY()}/private.key.pem"
